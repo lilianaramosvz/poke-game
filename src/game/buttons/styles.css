@@ -1,78 +1,118 @@
 /* styles.css */
 
 .action-bin {
-    background-color: #812160;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+  background-color: rgb(113, 0, 26);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 /* PAD styles */
 .container-pad {
-    width: 100px;
-    height: 100px;
-    display: flex;
-    background-color: #c8c6ca;
-    display: flex;
-    align-items: center;
-    border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  background-color: #c8c6ca;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
 }
 
 .pad-btn {
-    width: 35px;
-    height: 35px;
-    border-radius: 4px;
-    background-color: pink;
+  width: 35px;
+  height: 35px;
+  border-radius: 4px;
+  background-color: black;
 }
 
 .container-central {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .screen {
-    height: 200px;
-    background-color: #9ca04c;
-    display: flex;
-    flex-wrap: wrap;
-    overflow-x: hidden;
-    overflow-y: scroll;
+  height: 200px;
+  background-color: #9ca04c;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .container-screen {
-    padding-top: 5%;
-    padding-bottom: 25%;
-    justify-content: center;
-    display: flex;
+  padding-top: 5%;
+  padding-bottom: 25%;
+  justify-content: center;
+  display: flex;
 }
 
 .screen-text {
-    width: 85%;
-    height: 200px;
-    background-color: rgb(155, 160, 76); /* color oliva pantalla */
+  width: 85%;
+  height: 200px;
+  background-color: rgb(155, 160, 76);
+  /* color oliva pantalla */
 }
 
-/* Botones */
-.buttons {
-    width: 90px;
-    height: 40px;
-    display: flex;
-    gap: 10px;
-    transform: rotate(-20deg);
-    background-color: rgb(128, 21, 95);
-    border-radius: 100%;
+/* Botones select y start */
+.select-start-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+  transform: translateX(flex);
+  transform: translateY(50px);
 }
 
-.buttons-btn {
-    background-color: rgb(128, 21, 95);
-    width: 40px;
-    height: 40px;
-    border-radius: 100%;
+.select-start-btn-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.buttons-btn2 {
-    background-color: rgb(128, 21, 95);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+.select-start-btn {
+  width: 35px;
+  height: 10px;
+  transform: rotate(-20deg);
+  background-color: rgb(143, 136, 156);
+  border-radius: 5px;
+}
+
+.select-start-label {
+  font-size: 8px;
+  margin-top: 2px;
+  transform: rotate(-20deg);
+  justify-content: center;
+  text-align: center;
+}
+
+@keyframes projectileMove {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100px);
+  }
+}
+
+@keyframes moveDiagonalRight {
+  0% {
+    top: 60%;
+    left: 30%;
+  }
+  100% {
+    top: 30%;
+    left: 60%;
+  }
+}
+
+@keyframes moveDiagonalLeft {
+  0% {
+    top: 30%;
+    left: 60%;
+  }
+  100% {
+    top: 60%;
+    left: 30%;
+  }
 }
