@@ -32,7 +32,7 @@
 
 .screen {
   height: 200px;
-  background-color: #9ca04c;
+  background-color: #94e6ee;
   display: flex;
   flex-wrap: wrap;
   overflow-x: hidden;
@@ -49,8 +49,7 @@
 .screen-text {
   width: 85%;
   height: 200px;
-  background-color: rgb(155, 160, 76);
-  /* color oliva pantalla */
+  background-color: rgb(135, 193, 206);
 }
 
 /* Botones select y start */
