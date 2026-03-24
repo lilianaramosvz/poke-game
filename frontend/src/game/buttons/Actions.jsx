@@ -1,68 +1,17 @@
 //Actions.jsx
 
-import React from "react";
+import "../styles/Actions.css";
 
-const Actions = ({ computerSelection, handlePlayerAttack }) => {
+const Actions = ({ handlePlayerAttack }) => {
   return (
-    <div
-      style={{
-        width: "90px",
-        height: "60px",
-        display: "flex",
-        gap: "10px",
-        transform: "rotate(-20deg)",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <button
-          style={{
-            backgroundColor: "rgb(113, 0, 26)",
-            width: "40px",
-            height: "60px",
-            borderRadius: "100%",
-          }}
-          onClick={handlePlayerAttack}
-        ></button>
-        <span
-          style={{
-            transform: "rotate(20deg)",
-            fontSize: "12px",
-            marginTop: "4px",
-          }}
-        >
-          B
-        </span>
+    <div className="actions-container">
+      <div className="action-btn-group">
+        <button className="action-btn" onClick={handlePlayerAttack}></button>
+        <span className="action-label">B</span>
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <button
-          style={{
-            backgroundColor: "rgb(113, 0, 26)",
-            width: "40px",
-            height: "60px",
-            borderRadius: "100%",
-          }}
-        ></button>
-        <span
-          style={{
-            transform: "rotate(20deg)",
-            fontSize: "12px",
-            marginTop: "4px",
-          }}
-        >
-          A
-        </span>
+      <div className="action-btn-group">
+        <button className="action-btn"></button>
+        <span className="action-label">A</span>
       </div>
     </div>
   );

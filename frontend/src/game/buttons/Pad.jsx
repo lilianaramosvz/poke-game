@@ -1,7 +1,6 @@
 //Pad.jsx
 
-import React from "react";
-import "./styles.css";
+import "../styles/Pad.css";
 
 const Pad = ({ handlePress }) => {
   return (

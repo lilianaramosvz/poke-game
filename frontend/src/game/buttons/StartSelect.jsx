@@ -1,6 +1,6 @@
 //StartSelect.jsx
 
-import React from "react";
+import "../styles/StartSelect.css";
 
 const StartSelect = ({ handleSelectPokemon, handleStart }) => {
   return (

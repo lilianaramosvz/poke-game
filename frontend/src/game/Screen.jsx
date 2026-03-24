@@ -1,92 +1,80 @@
 // Screen.jsx
-const Screen = ({ pokemones, hoverPokemon, selectedPokemones, health, playerAttackEffect, enemyAttackEffect, projectile, winner, setProjectile }) => {
+import "./Screen.css";
 
+const Screen = ({
+  pokemones,
+  hoverPokemon,
+  selectedPokemones,
+  health,
+  projectile,
+  winner,
+  setProjectile,
+}) => {
   return (
     <div className="container-screen">
       <div className="screen-text">
-        <div className="screen">
+        <div className={`screen ${selectedPokemones.length === 2 ? "screen-battle" : ""}`}>
           {selectedPokemones.length === 2 ? (
-            <div>
-
-              {/* barra de vida */}
-              <div style={{ display: "flex", justifyContent: "space-between", padding: "0 10px", alignItems: "center" }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "45%" }}>
-                  <p style={{ fontSize: "10px", margin: 0 }}>{selectedPokemones[0][0].name}</p>
-                  <div style={{ width: "100%", backgroundColor: "#ccc", height: "10px", borderRadius: "5px" }}>
+            <div className="battle-stage">
+              <div className="battle-column battle-column-player">
+                <div className="health-card">
+                  <p className="health-name">{selectedPokemones[0][0].name}</p>
+                  <div className="health-track">
                     <div
-                      style={{
-                        width: `${health[0]}%`,
-                        backgroundColor: "green",
-                        height: "100%",
-                        borderRadius: "5px",
-                      }}
+                      className="health-fill health-fill-player"
+                      style={{ width: `${health[0]}%` }}
                     />
                   </div>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "45%" }}>
-                  <p style={{ fontSize: "10px", margin: 0 }}>{selectedPokemones[1][0].name}</p>
-                  <div style={{ width: "100%", backgroundColor: "#ccc", height: "10px", borderRadius: "5px" }}>
+                <div className="player-pokemon-wrapper">
+                  {projectile?.from === "player" && (
                     <div
-                      style={{
-                        width: `${health[1]}%`,
-                        backgroundColor: "red",
-                        height: "100%",
-                        borderRadius: "5px",
-                      }}
+                      className="projectile projectile-player"
+                      onAnimationEnd={() => setProjectile(null)}
+                    />
+                  )}
+                  <img
+                    className="battle-sprite"
+                    src={selectedPokemones[0][0].sprites?.front_default}
+                    alt="pokemon seleccionado"
+                  />
+                </div>
+              </div>
+              <div className="battle-divider" aria-hidden="true" />
+              <div className="battle-column battle-column-enemy">
+                <div className="health-card">
+                  <p className="health-name">{selectedPokemones[1][0].name}</p>
+                  <div className="health-track">
+                    <div
+                      className="health-fill health-fill-enemy"
+                      style={{ width: `${health[1]}%` }}
                     />
                   </div>
                 </div>
-              </div>
-
-
-
-
-              {/* dispaross */}
-              {projectile && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: projectile.from === "player" ? "60%" : "30%", // Posición inicial
-                    left: projectile.from === "player" ? "30%" : "60%", // Posición inicial
-                    width: "10px",
-                    height: "10px",
-                    backgroundColor: "black",
-                    borderRadius: "50%",
-                    animation: "projectileMove 0.5s linear",
-                    animationName: projectile.from === "player" ? "moveDiagonalRight" : "moveDiagonalLeft", // Direcciones de animación
-                  }}
-                  onAnimationEnd={() => setProjectile(null)}
-                />
-              )}
-
-
-              {/* display imagenes pokes*/}
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <img
-                  src={selectedPokemones[0][0].sprites?.front_default}
-                  alt="pokemon seleccionado"
-                />
-              </div>
-              <div style={{ width: "315px", height: "50%" }}>
-                <img
-                  src={selectedPokemones[1][0].sprites?.back_default}
-                  alt="pokemon enemigo"
-                />
+                <div className="enemy-pokemon-wrapper">
+                  {projectile?.from === "enemy" && (
+                    <div
+                      className="projectile projectile-enemy"
+                      onAnimationEnd={() => setProjectile(null)}
+                    />
+                  )}
+                  <img
+                    className="battle-sprite"
+                    src={selectedPokemones[1][0].sprites?.back_default}
+                    alt="pokemon enemigo"
+                  />
+                </div>
               </div>
             </div>
           ) : (
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
+            <div className="pokemon-grid">
               {pokemones?.map((pokemon) => (
                 <div
                   key={pokemon.id}
-                  style={{
-                    backgroundColor: `${hoverPokemon === pokemon.id ? "yellow" : ""}`,
-                  }}
+                  className={`pokemon-card ${hoverPokemon === pokemon.id ? "pokemon-card-hover" : ""}`}
                 >
                   <img src={pokemon.sprites.front_default} alt="pokemones" />
-                  <p style={{ fontFamily: "Pokemon Classic", fontSize: "8px" }}>
-                    {pokemon.name}
-                  </p>
+                  <p className="pokemon-name">{pokemon.name}</p>
                 </div>
               ))}
             </div>
@@ -94,27 +82,17 @@ const Screen = ({ pokemones, hoverPokemon, selectedPokemones, health, playerAtta
         </div>
 
         {winner && (
-          <div style={{
-            position: "absolute",
-            top: "16%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            backgroundColor: "white",
-            padding: "10px",
-            border: "2px solid black",
-            borderRadius: "10px",
-          }}>
-            <h3 style={{ fontFamily: "Pokemon Classic" }}>
+          <div className="winner-modal">
+            <h3 className="winner-title">
               {winner === "player" ? "¡Ganaste!" : "¡Perdiste!"}
             </h3>
           </div>
         )}
 
-
         <div className="container-text">
           <p className="text">
             Nintendo <span>GAME BOY</span>
-            <span style={{ fontSize: "8px" }}> TM</span>
+            <span className="tm-text"> TM</span>
           </p>
         </div>
       </div>

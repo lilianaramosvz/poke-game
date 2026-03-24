@@ -17,9 +17,7 @@ function App() {
   const [playerAttackEffect, setPlayerAttackEffect] = useState(false);
   const [enemyAttackEffect, setEnemyAttackEffect] = useState(false);
   const [projectile, setProjectile] = useState(null); //para la animación del ataque
-  const [winner, setWinner] = useState(null); //indica el ganador 
-
-
+  const [winner, setWinner] = useState(null); //indica el ganador
 
   useEffect(() => {
     const getPokemones = async () => {
@@ -39,7 +37,7 @@ function App() {
 
   const handleSelectPokemon = () => {
     const pokemonSelected = pokemones.filter(
-      (pokemon) => pokemon.id === hoverPokemon
+      (pokemon) => pokemon.id === hoverPokemon,
     );
     const selections = [pokemonSelected, computerSelection()];
     setSelectedPokemones(selections);
@@ -49,7 +47,7 @@ function App() {
   const computerSelection = () => {
     const randomid = Math.floor(Math.random() * pokemones.length);
     const selectElement = pokemones.filter(
-      (pokemon) => pokemon.id === randomid
+      (pokemon) => pokemon.id === randomid,
     );
     return selectElement;
   };
@@ -62,7 +60,6 @@ function App() {
       setHoverPokemon(hoverPokemon - 1);
     }
   };
-
 
   useEffect(() => {
     const fetchMoves = async () => {
@@ -109,7 +106,6 @@ function App() {
     return () => clearInterval(interval);
   }, [enemyAttacking, winner]);
 
-
   useEffect(() => {
     if (health[0] === 0 && !winner) {
       setWinner("enemy");
@@ -120,7 +116,6 @@ function App() {
     }
   }, [health]);
 
-
   useEffect(() => {
     let interval;
     if (enemyAttacking) {
@@ -128,7 +123,6 @@ function App() {
         const damage = Math.floor(Math.random() * 20) + 10;
         setEnemyAttackEffect(true);
         setTimeout(() => setEnemyAttackEffect(false), 500);
-
 
         setHealth((prevHealth) => {
           const newHealth = [...prevHealth];
@@ -146,23 +140,8 @@ function App() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          width: "350px",
-          height: "500px",
-          border: "2px black solid",
-          borderRadius: "5px 5px 35px 5px",
-          backgroundColor: "rgb(221, 221, 225)",
-        }}
-      >
+    <div className="app-root">
+      <div className="gameboy-shell">
         <Screen
           pokemones={pokemones}
           hoverPokemon={hoverPokemon}
@@ -173,9 +152,12 @@ function App() {
           setProjectile={setProjectile}
         />
 
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
+        <div className="controls-row">
           <Pad handlePress={handlePress} />
-          <StartSelect handleSelectPokemon={handleSelectPokemon} handleStart={handleStart} />
+          <StartSelect
+            handleSelectPokemon={handleSelectPokemon}
+            handleStart={handleStart}
+          />
           <Actions handlePlayerAttack={handlePlayerAttack} />
         </div>
       </div>
