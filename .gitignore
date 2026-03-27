@@ -34,3 +34,4 @@ node_modules/
 frontend/.env
 backend/.env
 backend/poke-game-*.json
+frontend/.env.local
