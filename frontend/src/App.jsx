@@ -16,8 +16,8 @@ function App() {
   const BASE_URL = "https://pokeapi.co/api/v2/";
   const [playerAttackEffect, setPlayerAttackEffect] = useState(false);
   const [enemyAttackEffect, setEnemyAttackEffect] = useState(false);
-  const [projectile, setProjectile] = useState(null); //para la animación del ataque
-  const [winner, setWinner] = useState(null); //indica el ganador
+  const [projectile, setProjectile] = useState(null); 
+  const [winner, setWinner] = useState(null); 
 
   useEffect(() => {
     const getPokemones = async () => {
@@ -31,8 +31,31 @@ function App() {
 
   const getDetails = async (results) => {
     const res = await Promise.all(results.map((result) => fetch(result.url)));
-    const data = await Promise.all(res.map((gato) => gato.json()));
+    const data = await Promise.all(res.map((pokemon) => pokemon.json()));
     return data;
+  };
+
+  // NUEVA FUNCIÓN: Envía los datos al backend
+  const guardarResultadoBatalla = async (resultadoGanador) => {
+    const datosBatalla = {
+      jugador: selectedPokemones[0][0].name,
+      enemigo: selectedPokemones[1][0].name,
+      ganador: resultadoGanador, // "player" o "enemy"
+      fecha: new Date().toISOString()
+    };
+
+    try {
+      const response = await fetch("http://localhost:3000/api/batallas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datosBatalla),
+      });
+      if (response.ok) {
+        console.log("Resultado guardado en Firebase correctamente");
+      }
+    } catch (error) {
+      console.error("Error al conectar con el backend:", error);
+    }
   };
 
   const handleSelectPokemon = () => {
@@ -42,6 +65,7 @@ function App() {
     const selections = [pokemonSelected, computerSelection()];
     setSelectedPokemones(selections);
     setHealth([100, 100]);
+    setWinner(null); // Reiniciar ganador para nueva partida
   };
 
   const computerSelection = () => {
@@ -86,6 +110,7 @@ function App() {
     }
   };
 
+  // Efecto del ataque enemigo
   useEffect(() => {
     let interval;
     if (enemyAttacking && !winner) {
@@ -106,37 +131,24 @@ function App() {
     return () => clearInterval(interval);
   }, [enemyAttacking, winner]);
 
+  // Lógica de victoria y guardado
   useEffect(() => {
     if (health[0] === 0 && !winner) {
       setWinner("enemy");
       setEnemyAttacking(false);
+      guardarResultadoBatalla("enemy"); // Llamada al backend
     } else if (health[1] === 0 && !winner) {
       setWinner("player");
       setEnemyAttacking(false);
+      guardarResultadoBatalla("player"); // Llamada al backend
     }
-  }, [health]);
-
-  useEffect(() => {
-    let interval;
-    if (enemyAttacking) {
-      interval = setInterval(() => {
-        const damage = Math.floor(Math.random() * 20) + 10;
-        setEnemyAttackEffect(true);
-        setTimeout(() => setEnemyAttackEffect(false), 500);
-
-        setHealth((prevHealth) => {
-          const newHealth = [...prevHealth];
-          newHealth[0] -= damage;
-          if (newHealth[0] < 0) newHealth[0] = 0;
-          return newHealth;
-        });
-      }, 1000); // Ataque cada cierto tiempo
-    }
-    return () => clearInterval(interval);
-  }, [enemyAttacking]);
+  }, [health])
+  ;
 
   const handleStart = () => {
-    setEnemyAttacking(true);
+    if (selectedPokemones.length === 2 && !winner) {
+      setEnemyAttacking(true);
+    }
   };
 
   return (
@@ -165,4 +177,5 @@ function App() {
   );
 }
 
-export default App;
+export default App
+;
