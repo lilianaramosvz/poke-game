@@ -1,6 +1,6 @@
 //backend\src\routes\storage.js
 import { Router } from "express";
-import { bucket } from "../index.js";
+import { bucket } from "../firebase.js";
 import { verificarToken } from "../middleware/auth.js";
 import multer from "multer";
 

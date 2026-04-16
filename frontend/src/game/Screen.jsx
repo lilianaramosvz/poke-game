@@ -12,6 +12,9 @@ const Screen = ({
 }) => {
   const player = selectedPokemones?.[0]?.[0];
   const enemy = selectedPokemones?.[1]?.[0];
+  const [playerHealth = 100, enemyHealth = 100] = Array.isArray(health)
+    ? health
+    : [];
 
   return (
     <div className="container-screen">

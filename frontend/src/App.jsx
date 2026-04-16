@@ -6,7 +6,7 @@ import Pad from "./game/buttons/Pad";
 import Actions from "./game/buttons/Actions";
 import StartSelect from "./game/buttons/StartSelect";
 
-const API = "http://localhost:3000/api";
+const API = import.meta.env.VITE_API_URL ?? "/api";
 
 const normalizeHealthValue = (value) => {
   const parsed = Number(value);
@@ -16,7 +16,7 @@ const normalizeHealthValue = (value) => {
 
 function App() {
   const [pokemones, setPokemones] = useState([]);
-  const [hoverPokemon, setHoverPokemon] = useState(0);
+  const [hoverPokemon, setHoverPokemon] = useState(1);
   const [selectedPokemones, setSelectedPokemones] = useState([]);
   const [health, setHealth] = useState([100, 100]);
   const [moves, setMoves] = useState([[], []]);
@@ -38,6 +38,12 @@ function App() {
     };
     getPokemones();
   }, []);
+
+  useEffect(() => {
+    if (pokemones.length > 0 && hoverPokemon === 0) {
+      setHoverPokemon(pokemones[0].id);
+    }
+  }, [pokemones, hoverPokemon]);
 
   const getDetails = async (results) => {
     const res = await Promise.all(results.map((result) => fetch(result.url)));
@@ -107,6 +113,8 @@ function App() {
 
     const enemy = computerSelection();
 
+    if (!pokemonSelected.length || !enemy.length) return;
+
     setSelectedPokemones([pokemonSelected, enemy]);
     setWinner(null);
 
@@ -123,14 +131,18 @@ function App() {
   };
 
   const computerSelection = () => {
-    const randomid = Math.floor(Math.random() * pokemones.length);
-    return pokemones.filter((pokemon) => pokemon.id === randomid);
+    if (pokemones.length === 0) return [];
+
+    const randomIndex = Math.floor(Math.random() * pokemones.length);
+    const randomPokemon = pokemones[randomIndex];
+
+    return randomPokemon ? [randomPokemon] : [];
   };
 
   const handlePress = (dir) => {
-    if (dir === "right" && hoverPokemon < pokemones.length - 1)
+    if (dir === "right" && hoverPokemon < pokemones[pokemones.length - 1]?.id)
       setHoverPokemon(hoverPokemon + 1);
-    if (dir === "left" && hoverPokemon > 0) setHoverPokemon(hoverPokemon - 1);
+    if (dir === "left" && hoverPokemon > 1) setHoverPokemon(hoverPokemon - 1);
   };
 
   // MOVIMIENTOS
