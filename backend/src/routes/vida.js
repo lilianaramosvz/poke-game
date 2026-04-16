@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 // backend\src\routes\vida.js
-=======
-// routes/vida.js
-
->>>>>>> 8dab7f6 (Cambios Finales)
 import { Router } from "express";
 import { db } from "../firebase.js";
 

@@ -3,10 +3,6 @@ import { Router } from "express";
 import { db } from "../firebase.js";
 const router = Router();
 
-<<<<<<< HEAD
-// GET obtener todas las batallas
-=======
->>>>>>> 8dab7f6 (Cambios Finales)
 router.get("/", async (req, res) => {
   try {
     const snapshot = await db.ref("batallas").get();
@@ -16,10 +12,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-// POST guardar batalla
-=======
->>>>>>> 8dab7f6 (Cambios Finales)
 router.post("/", async (req, res) => {
   try {
     const { jugador, enemigo, ganador, fecha } = req.body;
