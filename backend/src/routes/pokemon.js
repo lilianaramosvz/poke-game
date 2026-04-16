@@ -6,16 +6,23 @@ const router = Router();
 // Active SSE response objects
 const sseClients = new Set();
 
-// Firebase listener — broadcasts DB changes to all connected SSE clients
-db.ref("pokemon/vida").on("value", (snapshot) => {
+// Firebase listener — broadcasts DB changes to all connected SSE clients.
+// Keep a reference so the listener can be cleaned up if the module is reloaded.
+const onVidaChange = (snapshot) => {
   const data = snapshot.val();
   if (data) {
     const payload = `data: ${JSON.stringify(data)}\n\n`;
     for (const client of sseClients) {
-      client.write(payload);
+      try {
+        client.write(payload);
+      } catch {
+        sseClients.delete(client);
+      }
     }
   }
-});
+};
+
+db.ref("pokemon/vida").on("value", onVidaChange);
 
 // GET /api/pokemon/vida — recover initial state from DB
 router.get("/vida", async (req, res) => {

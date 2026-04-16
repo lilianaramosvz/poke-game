@@ -65,6 +65,7 @@ function App() {
 
   // Envía los datos al backend
   const guardarResultadoBatalla = async (resultadoGanador) => {
+    if (selectedPokemones.length < 2) return;
     const datosBatalla = {
       jugador: selectedPokemones[0][0].name,
       enemigo: selectedPokemones[1][0].name,
