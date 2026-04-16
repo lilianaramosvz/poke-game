@@ -7,16 +7,12 @@
   padding: 24px 12px;
   overflow: hidden;
   box-sizing: border-box;
-  background: radial-gradient(
-    circle at 20% 20%,
-    #fffdef 45%,
-    #e5e2c7 100%
-  );
+  background: radial-gradient(circle at 20% 20%, #fffdef 45%, #e5e2c7 100%);
 }
 
 .gameboy-shell {
   width: min(92vw, 520px);
-  transform: scale(0.90);
+  transform: scale(0.9);
   transform-origin: top center;
   min-height: 60px;
   border: 3px solid #40424a;

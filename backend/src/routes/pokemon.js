@@ -1,13 +1,12 @@
+//backend\src\routes\pokemon.js
 import { Router } from "express";
 import { db } from "../index.js";
 
 const router = Router();
 
-// Active SSE response objects
+// Activar SSE respuesta a los objetos que se conecten
 const sseClients = new Set();
 
-// Firebase listener — broadcasts DB changes to all connected SSE clients.
-// Keep a reference so the listener can be cleaned up if the module is reloaded.
 const onVidaChange = (snapshot) => {
   const data = snapshot.val();
   if (data) {
@@ -24,7 +23,7 @@ const onVidaChange = (snapshot) => {
 
 db.ref("pokemon/vida").on("value", onVidaChange);
 
-// GET /api/pokemon/vida — recover initial state from DB
+// GET
 router.get("/vida", async (req, res) => {
   try {
     const snapshot = await db.ref("pokemon/vida").get();
@@ -35,18 +34,19 @@ router.get("/vida", async (req, res) => {
   }
 });
 
-// POST /api/pokemon/iniciar — reset health when a battle starts
+// POST
 router.post("/iniciar", async (req, res) => {
   try {
     await db.ref("pokemon/vida").set({ player: 100, enemy: 100 });
-    res.status(201).json({ mensaje: "Batalla iniciada", vida: { player: 100, enemy: 100 } });
+    res
+      .status(201)
+      .json({ mensaje: "Batalla iniciada", vida: { player: 100, enemy: 100 } });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// PATCH /api/pokemon/vida — update health after an attack
-// Body: { player?: number, enemy?: number }
+// PATCH
 router.patch("/vida", async (req, res) => {
   try {
     const { player, enemy } = req.body;
@@ -65,7 +65,7 @@ router.patch("/vida", async (req, res) => {
   }
 });
 
-// GET /api/pokemon/events — SSE stream; pushes DB changes in real time
+// GET
 router.get("/events", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
@@ -74,7 +74,6 @@ router.get("/events", (req, res) => {
 
   sseClients.add(res);
 
-  // Send current state immediately so the client has something on connect
   db.ref("pokemon/vida")
     .get()
     .then((snapshot) => {

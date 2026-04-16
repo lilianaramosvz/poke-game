@@ -1,3 +1,4 @@
+//backend\src\middleware\auth.js
 import admin from "firebase-admin";
 
 export async function verificarToken(req, res, next) {

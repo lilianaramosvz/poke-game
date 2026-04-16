@@ -1,4 +1,4 @@
-// Screen.jsx
+// frontend\src\game\Screen.jsx
 import "./Screen.css";
 
 const Screen = ({
@@ -10,10 +10,19 @@ const Screen = ({
   winner,
   setProjectile,
 }) => {
+  const playerHealth = Number.isFinite(health?.[0])
+    ? Math.max(0, Math.min(100, health[0]))
+    : 0;
+  const enemyHealth = Number.isFinite(health?.[1])
+    ? Math.max(0, Math.min(100, health[1]))
+    : 0;
+
   return (
     <div className="container-screen">
       <div className="screen-text">
-        <div className={`screen ${selectedPokemones.length === 2 ? "screen-battle" : ""}`}>
+        <div
+          className={`screen ${selectedPokemones.length === 2 ? "screen-battle" : ""}`}
+        >
           {selectedPokemones.length === 2 ? (
             <div className="battle-stage">
               <div className="battle-column battle-column-player">
@@ -22,9 +31,10 @@ const Screen = ({
                   <div className="health-track">
                     <div
                       className="health-fill health-fill-player"
-                      style={{ width: `${health[0]}%` }}
+                      style={{ width: `${playerHealth}%` }}
                     />
                   </div>
+                  <p className="health-value">{playerHealth}/100</p>
                 </div>
                 <div className="player-pokemon-wrapper">
                   {projectile?.from === "player" && (
@@ -47,9 +57,10 @@ const Screen = ({
                   <div className="health-track">
                     <div
                       className="health-fill health-fill-enemy"
-                      style={{ width: `${health[1]}%` }}
+                      style={{ width: `${enemyHealth}%` }}
                     />
                   </div>
+                  <p className="health-value">{enemyHealth}/100</p>
                 </div>
                 <div className="enemy-pokemon-wrapper">
                   {projectile?.from === "enemy" && (

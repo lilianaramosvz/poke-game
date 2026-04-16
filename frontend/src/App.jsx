@@ -1,3 +1,4 @@
+//frontend\src\App.jsx
 import { useEffect, useState, useRef } from "react";
 import "./App.css";
 import Screen from "./game/Screen";
@@ -6,6 +7,12 @@ import Actions from "./game/buttons/Actions";
 import StartSelect from "./game/buttons/StartSelect";
 
 const API = "http://localhost:3000/api";
+
+const normalizeHealthValue = (value) => {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return null;
+  return Math.max(0, Math.min(100, parsed));
+};
 
 function App() {
   const [pokemones, setPokemones] = useState([]);
@@ -20,9 +27,8 @@ function App() {
   const [projectile, setProjectile] = useState(null);
   const [winner, setWinner] = useState(null);
 
-  const sseRef = useRef(null); 
+  const sseRef = useRef(null);
 
-  // --- FETCH POKEMONS ---
   useEffect(() => {
     const getPokemones = async () => {
       const res = await fetch(`${BASE_URL}/pokemon`);
@@ -39,7 +45,7 @@ function App() {
     return data;
   };
 
-  // --- GUARDAR BATALLA ---
+  // GUARDAR BATALLA
   const guardarResultadoBatalla = async (resultadoGanador) => {
     if (selectedPokemones.length < 2) return;
 
@@ -62,7 +68,7 @@ function App() {
     }
   };
 
-  // --- ACTUALIZAR VIDA EN BACKEND ---
+  // ACTUALIZAR VIDA EN BACKEND
   const actualizarVidaEnBD = async (vidaJugador, vidaEnemigo) => {
     try {
       await fetch(`${API}/vida`, {
@@ -75,14 +81,13 @@ function App() {
     }
   };
 
-  // --- SINCRONIZAR VIDA AUTOMÁTICAMENTE ---
+  // SINCRONIZAR VIDA AUTOMÁTICAMENTE
   useEffect(() => {
     if (selectedPokemones.length === 2) {
       actualizarVidaEnBD(health[0], health[1]);
     }
   }, [health, selectedPokemones.length]);
 
-  // --- SSE (tiempo real) ---
   const conectarSSE = () => {
     if (sseRef.current) sseRef.current.close();
 
@@ -93,8 +98,15 @@ function App() {
       const data = JSON.parse(event.data);
       console.log("Actualización desde Firebase:", data);
 
-      if (data?.vidaJugador != null && data?.vidaEnemigo != null) {
-        setHealth([data.vidaJugador, data.vidaEnemigo]);
+      const vidaJugador = normalizeHealthValue(
+        data?.vidaJugador ?? data?.player,
+      );
+      const vidaEnemigo = normalizeHealthValue(
+        data?.vidaEnemigo ?? data?.enemy,
+      );
+
+      if (vidaJugador != null && vidaEnemigo != null) {
+        setHealth([vidaJugador, vidaEnemigo]);
       }
     };
 
@@ -104,17 +116,16 @@ function App() {
     };
   };
 
-  // --- LIMPIAR SSE ---
   useEffect(() => {
     return () => {
       if (sseRef.current) sseRef.current.close();
     };
   }, []);
 
-  // --- SELECCIONAR POKEMON ---
+  // SELECCIONAR POKEMON
   const handleSelectPokemon = () => {
     const pokemonSelected = pokemones.filter(
-      (pokemon) => pokemon.id === hoverPokemon
+      (pokemon) => pokemon.id === hoverPokemon,
     );
 
     const selections = [pokemonSelected, computerSelection()];
@@ -123,7 +134,7 @@ function App() {
     setHealth([100, 100]);
     setWinner(null);
 
-    conectarSSE(); 
+    conectarSSE();
   };
 
   const computerSelection = () => {
@@ -134,11 +145,10 @@ function App() {
   const handlePress = (dir) => {
     if (dir === "right" && hoverPokemon < pokemones.length - 1)
       setHoverPokemon(hoverPokemon + 1);
-    if (dir === "left" && hoverPokemon > 0)
-      setHoverPokemon(hoverPokemon - 1);
+    if (dir === "left" && hoverPokemon > 0) setHoverPokemon(hoverPokemon - 1);
   };
 
-  // --- MOVES ---
+  // MOVIMIENTOS
   useEffect(() => {
     if (selectedPokemones.length === 2) {
       const moves1 = selectedPokemones[0][0].moves.slice(0, 4);
@@ -147,7 +157,7 @@ function App() {
     }
   }, [selectedPokemones]);
 
-  // --- ATAQUE JUGADOR ---
+  // ATAQUE JUGADOR
   const handlePlayerAttack = () => {
     if (selectedPokemones.length === 2 && !winner) {
       const damage = Math.floor(Math.random() * 20) + 10;
@@ -164,7 +174,7 @@ function App() {
     }
   };
 
-  // --- ATAQUE ENEMIGO ---
+  // ATAQUE ENEMIGO
   useEffect(() => {
     let interval;
 
@@ -187,7 +197,7 @@ function App() {
     return () => clearInterval(interval);
   }, [enemyAttacking, winner]);
 
-  // --- GANADOR ---
+  // GANADOR
   useEffect(() => {
     if (health[0] === 0 && !winner) {
       setWinner("enemy");

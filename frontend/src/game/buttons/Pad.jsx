@@ -1,5 +1,4 @@
-//Pad.jsx
-
+//frontend\src\game\buttons\Pad.jsx
 import "../styles/Pad.css";
 
 const Pad = ({ handlePress }) => {

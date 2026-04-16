@@ -46,7 +46,11 @@
   justify-content: space-between;
   border-radius: 12px;
   border: 1px solid rgba(44, 69, 86, 0.25);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(220, 244, 250, 0.35));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.4),
+    rgba(220, 244, 250, 0.35)
+  );
   padding: 8px 8px 10px;
 }
 
@@ -61,7 +65,12 @@
 .battle-divider {
   width: 2px;
   border-radius: 99px;
-  background: linear-gradient(180deg, rgba(54, 76, 107, 0), rgba(54, 76, 107, 0.45), rgba(54, 76, 107, 0));
+  background: linear-gradient(
+    180deg,
+    rgba(54, 76, 107, 0),
+    rgba(54, 76, 107, 0.45),
+    rgba(54, 76, 107, 0)
+  );
 }
 
 .health-card {
@@ -98,6 +107,25 @@
   border-radius: 8px;
   overflow: hidden;
   margin-top: 4px;
+}
+
+.health-value {
+  margin: 4px 0 0;
+  font-size: 10px;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
+  font-weight: 700;
+  color: #1e3448;
 }
 
 .health-fill {

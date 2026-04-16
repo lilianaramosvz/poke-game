@@ -1,5 +1,4 @@
-//Actions.jsx
-
+//frontend\src\game\buttons\Actions.jsx
 import "../styles/Actions.css";
 
 const Actions = ({ handlePlayerAttack }) => {

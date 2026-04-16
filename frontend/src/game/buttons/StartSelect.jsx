@@ -1,5 +1,4 @@
-//StartSelect.jsx
-
+//frontend\src\game\buttons\StartSelect.jsx
 import "../styles/StartSelect.css";
 
 const StartSelect = ({ handleSelectPokemon, handleStart }) => {
