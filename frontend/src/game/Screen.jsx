@@ -10,24 +10,18 @@ const Screen = ({
   winner,
   setProjectile,
 }) => {
-  const playerHealth = Number.isFinite(health?.[0])
-    ? Math.max(0, Math.min(100, health[0]))
-    : 0;
-  const enemyHealth = Number.isFinite(health?.[1])
-    ? Math.max(0, Math.min(100, health[1]))
-    : 0;
+  const player = selectedPokemones?.[0]?.[0];
+  const enemy = selectedPokemones?.[1]?.[0];
 
   return (
     <div className="container-screen">
       <div className="screen-text">
-        <div
-          className={`screen ${selectedPokemones.length === 2 ? "screen-battle" : ""}`}
-        >
-          {selectedPokemones.length === 2 ? (
+        <div className={`screen ${player && enemy ? "screen-battle" : ""}`}>
+          {player && enemy ? (
             <div className="battle-stage">
               <div className="battle-column battle-column-player">
                 <div className="health-card">
-                  <p className="health-name">{selectedPokemones[0][0].name}</p>
+                  <p className="health-name">{player?.name || "..."}</p>
                   <div className="health-track">
                     <div
                       className="health-fill health-fill-player"
@@ -36,6 +30,7 @@ const Screen = ({
                   </div>
                   <p className="health-value">{playerHealth}/100</p>
                 </div>
+
                 <div className="player-pokemon-wrapper">
                   {projectile?.from === "player" && (
                     <div
@@ -43,17 +38,20 @@ const Screen = ({
                       onAnimationEnd={() => setProjectile(null)}
                     />
                   )}
+
                   <img
                     className="battle-sprite"
-                    src={selectedPokemones[0][0].sprites?.front_default}
-                    alt="pokemon seleccionado"
+                    src={player?.sprites?.front_default}
+                    alt="pokemon jugador"
                   />
                 </div>
               </div>
+
               <div className="battle-divider" aria-hidden="true" />
+
               <div className="battle-column battle-column-enemy">
                 <div className="health-card">
-                  <p className="health-name">{selectedPokemones[1][0].name}</p>
+                  <p className="health-name">{enemy?.name || "..."}</p>
                   <div className="health-track">
                     <div
                       className="health-fill health-fill-enemy"
@@ -62,6 +60,7 @@ const Screen = ({
                   </div>
                   <p className="health-value">{enemyHealth}/100</p>
                 </div>
+
                 <div className="enemy-pokemon-wrapper">
                   {projectile?.from === "enemy" && (
                     <div
@@ -69,9 +68,10 @@ const Screen = ({
                       onAnimationEnd={() => setProjectile(null)}
                     />
                   )}
+
                   <img
                     className="battle-sprite"
-                    src={selectedPokemones[1][0].sprites?.back_default}
+                    src={enemy?.sprites?.back_default}
                     alt="pokemon enemigo"
                   />
                 </div>
@@ -82,9 +82,11 @@ const Screen = ({
               {pokemones?.map((pokemon) => (
                 <div
                   key={pokemon.id}
-                  className={`pokemon-card ${hoverPokemon === pokemon.id ? "pokemon-card-hover" : ""}`}
+                  className={`pokemon-card ${
+                    hoverPokemon === pokemon.id ? "pokemon-card-hover" : ""
+                  }`}
                 >
-                  <img src={pokemon.sprites.front_default} alt="pokemones" />
+                  <img src={pokemon.sprites.front_default} alt={pokemon.name} />
                   <p className="pokemon-name">{pokemon.name}</p>
                 </div>
               ))}

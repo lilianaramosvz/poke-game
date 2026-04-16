@@ -6,11 +6,8 @@ import admin from "firebase-admin";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
-
-// Rutas
 import batallasRouter from "./routes/batallas.js";
 import storageRouter from "./routes/storage.js";
-import pokemonRouter from "./routes/pokemon.js";
 import vidaRouter from "./routes/vida.js";
 
 dotenv.config();
@@ -28,13 +25,6 @@ const serviceAccount = JSON.parse(
     "utf-8",
   ),
 );
-
-// Inicializar Firebase
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://poke-game-bced1-default-rtdb.firebaseio.com",
-  storageBucket: "poke-game-bced1.firebasestorage.app",
-});
 
 //  Exportaciones
 export const db = admin.database();
@@ -58,7 +48,6 @@ app.use(express.json());
 // Rutas
 app.use("/api/batallas", batallasRouter);
 app.use("/api/storage", storageRouter);
-app.use("/api/pokemon", pokemonRouter);
 app.use("/api/vida", vidaRouter);
 
 // ruta base

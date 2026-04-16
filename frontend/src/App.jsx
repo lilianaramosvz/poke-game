@@ -62,31 +62,10 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datosBatalla),
       });
-      console.log("Resultado guardado en Firebase");
     } catch (error) {
       console.error("Error al guardar batalla:", error);
     }
   };
-
-  // ACTUALIZAR VIDA EN BACKEND
-  const actualizarVidaEnBD = async (vidaJugador, vidaEnemigo) => {
-    try {
-      await fetch(`${API}/vida`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ vidaJugador, vidaEnemigo }),
-      });
-    } catch (error) {
-      console.error("Error al actualizar vida:", error);
-    }
-  };
-
-  // SINCRONIZAR VIDA AUTOMÁTICAMENTE
-  useEffect(() => {
-    if (selectedPokemones.length === 2) {
-      actualizarVidaEnBD(health[0], health[1]);
-    }
-  }, [health, selectedPokemones.length]);
 
   const conectarSSE = () => {
     if (sseRef.current) sseRef.current.close();
@@ -96,7 +75,6 @@ function App() {
 
     sse.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log("Actualización desde Firebase:", data);
 
       const vidaJugador = normalizeHealthValue(
         data?.vidaJugador ?? data?.player,
@@ -122,17 +100,24 @@ function App() {
     };
   }, []);
 
-  // SELECCIONAR POKEMON
-  const handleSelectPokemon = () => {
+  const handleSelectPokemon = async () => {
     const pokemonSelected = pokemones.filter(
       (pokemon) => pokemon.id === hoverPokemon,
     );
 
-    const selections = [pokemonSelected, computerSelection()];
+    const enemy = computerSelection();
 
-    setSelectedPokemones(selections);
-    setHealth([100, 100]);
+    setSelectedPokemones([pokemonSelected, enemy]);
     setWinner(null);
+
+    await fetch(`${API}/vida/iniciar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jugador: pokemonSelected[0].name,
+        enemigo: enemy[0].name,
+      }),
+    });
 
     conectarSSE();
   };
@@ -157,15 +142,17 @@ function App() {
     }
   }, [selectedPokemones]);
 
-  // ATAQUE JUGADOR
-  const handlePlayerAttack = () => {
+  const handlePlayerAttack = async () => {
     if (selectedPokemones.length === 2 && !winner) {
       const damage = Math.floor(Math.random() * 20) + 10;
 
-      setHealth((prev) => {
-        const newHealth = [...prev];
-        newHealth[1] = Math.max(0, newHealth[1] - damage);
-        return newHealth;
+      await fetch(`${API}/vida/atacar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          atacante: "jugador",
+          dano: damage,
+        }),
       });
 
       setProjectile({ from: "player", to: "enemy" });
@@ -179,18 +166,21 @@ function App() {
     let interval;
 
     if (enemyAttacking && !winner) {
-      interval = setInterval(() => {
+      interval = setInterval(async () => {
         const damage = Math.floor(Math.random() * 20) + 10;
+
+        await fetch(`${API}/vida/atacar`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            atacante: "enemigo",
+            dano: damage,
+          }),
+        });
 
         setEnemyAttackEffect(true);
         setProjectile({ from: "enemy", to: "player" });
         setTimeout(() => setEnemyAttackEffect(false), 500);
-
-        setHealth((prev) => {
-          const newHealth = [...prev];
-          newHealth[0] = Math.max(0, newHealth[0] - damage);
-          return newHealth;
-        });
       }, 1000);
     }
 

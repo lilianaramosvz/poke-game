@@ -1,7 +1,6 @@
 //backend\src\routes\pokemon.js
 import { Router } from "express";
-import { db } from "../index.js";
-
+import { db } from "../firebase.js";
 const router = Router();
 
 // Activar SSE respuesta a los objetos que se conecten
