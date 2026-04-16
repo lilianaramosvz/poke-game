@@ -32,9 +32,11 @@ app.use(express.json());
 // Rutas
 import batallasRouter from "./routes/batallas.js";
 import storageRouter from "./routes/storage.js";
+import pokemonRouter from "./routes/pokemon.js";
 
 app.use("/api/batallas", batallasRouter);
 app.use("/api/storage", storageRouter);
+app.use("/api/pokemon", pokemonRouter);
 
 // Ruta de prueba
 app.get("/", (req, res) => {
