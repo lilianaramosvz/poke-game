@@ -9,6 +9,7 @@ import fs from "fs";
 // Rutas
 import batallasRouter from "./routes/batallas.js";
 import storageRouter from "./routes/storage.js";
+import pokemonRouter from "./routes/pokemon.js";
 import vidaRouter from "./routes/vida.js";
 
 dotenv.config();
@@ -53,6 +54,7 @@ app.use(express.json());
 // --- Rutas ---
 app.use("/api/batallas", batallasRouter);
 app.use("/api/storage", storageRouter);
+app.use("/api/pokemon", pokemonRouter);
 app.use("/api/vida", vidaRouter);
 
 // --- Ruta base ---
