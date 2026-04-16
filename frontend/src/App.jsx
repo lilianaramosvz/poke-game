@@ -62,7 +62,7 @@ function App() {
     }
   };
 
-  // --- 🔥 ACTUALIZAR VIDA EN BACKEND ---
+  // --- ACTUALIZAR VIDA EN BACKEND ---
   const actualizarVidaEnBD = async (vidaJugador, vidaEnemigo) => {
     try {
       await fetch(`${API}/vida`, {
@@ -75,14 +75,14 @@ function App() {
     }
   };
 
-  // --- 🔥 SINCRONIZAR VIDA AUTOMÁTICAMENTE ---
+  // --- SINCRONIZAR VIDA AUTOMÁTICAMENTE ---
   useEffect(() => {
     if (selectedPokemones.length === 2) {
       actualizarVidaEnBD(health[0], health[1]);
     }
   }, [health, selectedPokemones.length]);
 
-  // --- 🔥 SSE (tiempo real) ---
+  // --- SSE (tiempo real) ---
   const conectarSSE = () => {
     if (sseRef.current) sseRef.current.close();
 
