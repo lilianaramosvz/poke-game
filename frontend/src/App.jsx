@@ -20,7 +20,7 @@ function App() {
   const [projectile, setProjectile] = useState(null);
   const [winner, setWinner] = useState(null);
 
-  const sseRef = useRef(null); // 🔥 para SSE
+  const sseRef = useRef(null); 
 
   // --- FETCH POKEMONS ---
   useEffect(() => {
@@ -123,7 +123,7 @@ function App() {
     setHealth([100, 100]);
     setWinner(null);
 
-    conectarSSE(); // 🔥 iniciar conexión
+    conectarSSE(); 
   };
 
   const computerSelection = () => {

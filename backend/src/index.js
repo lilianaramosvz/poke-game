@@ -46,7 +46,7 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "OPTIONS"],
 }));
 
-app.use(cors());// 👈 CLAVE para evitar errores de preflight
+app.use(cors());
 
 app.use(express.json());
 
